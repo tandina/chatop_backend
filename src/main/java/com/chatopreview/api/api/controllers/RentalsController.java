@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/")
 public class RentalsController {
-    private RentalService rentalService;
+    private final RentalService rentalService;
 
     public RentalsController(RentalService rentalService) {
         this.rentalService = rentalService;
@@ -37,15 +37,11 @@ public class RentalsController {
         return new ResponseEntity<>(rentalService.createRental(rentalDto), HttpStatus.CREATED);
     }
 
+
     @PutMapping("rental/{id}/update")
-    public ResponseEntity<Rental> updateRental(@RequestBody Rental rental, @PathVariable("id") int rentalId) {
-        System.out.println(rental.getName());
-        System.out.println(rental.getSurface());
-        System.out.println(rental.getPrice());
-        System.out.println(rental.getPicture());
-        System.out.println(rental.getDescription());
-        System.out.println(rental.getOwner_id());
-        return ResponseEntity.ok(rental);
+    public ResponseEntity<RentalDto> updateRental(@RequestBody RentalDto rentalDto, @PathVariable("id") int rentalId) {
+        RentalDto response = rentalService.updateRental(rentalDto, rentalId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @DeleteMapping("rental/{id}/delete")
     public ResponseEntity<String> deleteRental(@PathVariable("id") int rentalId) {

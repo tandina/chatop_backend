@@ -8,5 +8,6 @@ public interface RentalService {
     RentalDto createRental(RentalDto rentalDto);
     List<RentalDto> getAllRental();
     RentalDto getRentalById(int id);
+    RentalDto updateRental(RentalDto rentalDto, int id);
 
 }

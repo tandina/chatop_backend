@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class RentalServiceImpl implements RentalService {
-    private RentalRepository rentalRepository;
+    private final RentalRepository rentalRepository;
 
     @Autowired
     public RentalServiceImpl(RentalRepository rentalRepository) {
@@ -52,6 +52,20 @@ public class RentalServiceImpl implements RentalService {
     public RentalDto getRentalById(int id) {
         Rental rental= rentalRepository.findById(id).orElseThrow(() -> new RentalNotFoundException("Annonce introuvable"));
         return mapToDto(rental);
+    }
+
+    @Override
+    public RentalDto updateRental(RentalDto rentalDto, int id) {
+        Rental rental= rentalRepository.findById(id).orElseThrow(()-> new RentalNotFoundException("L'annonce ne peux être mis à jour"));
+
+        rental.setName(rentalDto.getName());
+        rental.setSurface(rentalDto.getSurface());
+        rental.setPrice(rentalDto.getPrice());
+        rental.setDescription(rentalDto.getDescription());
+        rental.setPicture(rentalDto.getPicture());
+        rental.setOwner_id(rentalDto.getOwner_id());
+        Rental updatedRental =rentalRepository.save(rental);
+        return mapToDto(updatedRental);
     }
 
     private RentalDto mapToDto(Rental rental) {
