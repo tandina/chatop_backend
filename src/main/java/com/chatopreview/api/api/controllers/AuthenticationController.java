@@ -23,12 +23,14 @@ public class AuthenticationController {
     public ResponseEntity<User> signup(@RequestBody SignUpRequest signUpRequest){
         return ResponseEntity.ok(authenticationService.signup(signUpRequest));
     }
-    @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationResponse> singin(@RequestBody SigninRequest signinRequest){
+    @PostMapping("/signing")
+    public ResponseEntity<JwtAuthenticationResponse> signing(@RequestBody SigninRequest signinRequest){
         return ResponseEntity.ok(authenticationService.signin(signinRequest));
     }
     @PostMapping("/refresh")
     public ResponseEntity<JwtAuthenticationResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest){
         return ResponseEntity.ok(authenticationService.refreshToken(refreshTokenRequest));
     }
+
+
 }

@@ -11,7 +11,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +28,11 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeRequests(request -> request.requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin").hasAnyAuthority(Role.ADMIN.name())
-                        .requestMatchers("/api/user").hasAnyAuthority(Role.USER.name())
+                .csrf().disable()
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/auth/signing").permitAll()
+                        .requestMatchers("/api/auth/admin").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/auth/user").hasAnyAuthority(Role.USER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

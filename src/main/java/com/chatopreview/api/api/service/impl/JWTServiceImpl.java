@@ -26,7 +26,7 @@ public class JWTServiceImpl implements JWTService {
         random.nextBytes(keyBytes);
 
         secretKey = Base64.getEncoder().encodeToString(keyBytes);
-        System.out.println("Generated SECRET_KEY : " + secretKey);
+        System.out.println("Generated SECRET_KEY : " + "piCdjyVY1fiZavME8QHZymVx2nU6xGsEsK89L+/DRpU=");
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -50,11 +50,7 @@ public class JWTServiceImpl implements JWTService {
         final Claims claims = extractAllClaims(token);
         return claimsResolvers.apply(claims);
     }
-    //413F4428472B4B6250655368566D5970337336763979244226452948404D6351
-    //private Key getSignKey() {
-      //  byte[] key = Decoders.BASE64.decode(secretKey);
-        //return Keys.hmacShaKeyFor(key);
-    //}
+
     private Key getSignKey() {
         byte[] key = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(key);
