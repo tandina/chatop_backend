@@ -31,8 +31,14 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/signing").permitAll()
+                        .requestMatchers("/api/auth/signup").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/**").permitAll()
+                        .requestMatchers("/api-docs").permitAll()
                         .requestMatchers("/api/auth/admin").hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers("/api/auth/user").hasAnyAuthority(Role.USER.name())
+                        .requestMatchers("/api/auth/rental/**").hasAnyAuthority(Role.USER.name())
+                        .requestMatchers("/api/auth/message").hasAnyAuthority(Role.USER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.chatopreview.api.api.entities.User;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +22,10 @@ public class UserServiceImpl implements UserService {
                         .orElseThrow(() -> new UsernameNotFoundException("utilisateur introuvable"));
             }
         };
+    }
+    @Override
+    public User findById(int id) {
+        return userRepository.findById(Long.valueOf(id))
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur introuvable"));
     }
 }

@@ -3,8 +3,11 @@ package com.chatopreview.api.api.service.impl;
 import com.chatopreview.api.api.dto.RentalDto;
 import com.chatopreview.api.api.exceptions.RentalNotFoundException;
 import com.chatopreview.api.api.models.Rental;
+import com.chatopreview.api.api.entities.User;
 import com.chatopreview.api.api.repository.RentalRepository;
 import com.chatopreview.api.api.service.RentalService;
+import com.chatopreview.api.api.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +17,14 @@ import java.util.stream.Collectors;
 @Service
 public class RentalServiceImpl implements RentalService {
     private final RentalRepository rentalRepository;
+    private final UserService userService;
 
     @Autowired
-    public RentalServiceImpl(RentalRepository rentalRepository) {
-        this.rentalRepository=rentalRepository;
+    public RentalServiceImpl(RentalRepository rentalRepository, UserService userService) {
+        this.rentalRepository = rentalRepository;
+        this.userService = userService; 
     }
+
     @Override
     public RentalDto createRental(RentalDto rentalDto) {
         Rental rental = new Rental();
@@ -27,7 +33,8 @@ public class RentalServiceImpl implements RentalService {
         rental.setPrice(rentalDto.getPrice());
         rental.setPicture(rentalDto.getPicture());
         rental.setDescription(rentalDto.getDescription());
-        rental.setOwner_id(rentalDto.getOwner_id());
+        User owner = userService.findById(rentalDto.getOwnerId());
+        rental.setOwner(owner);
 
         Rental newRental = rentalRepository.save(rental);
 
@@ -38,14 +45,15 @@ public class RentalServiceImpl implements RentalService {
         rentalResponse.setPrice(newRental.getPrice());
         rentalResponse.setPicture(newRental.getPicture());
         rentalResponse.setDescription(newRental.getDescription());
-        rentalResponse.setOwner_id(newRental.getOwner_id());
+        rentalResponse.setOwnerId(newRental.getOwnerId());
 
         return rentalResponse;
     }
+
     @Override
     public List<RentalDto> getAllRental() {
         List<Rental> rental= rentalRepository.findAll();
-        return rental.stream().map(r -> mapToDto(r)).collect(Collectors.toList());
+        return rental.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -63,7 +71,9 @@ public class RentalServiceImpl implements RentalService {
         rental.setPrice(rentalDto.getPrice());
         rental.setDescription(rentalDto.getDescription());
         rental.setPicture(rentalDto.getPicture());
-        rental.setOwner_id(rentalDto.getOwner_id());
+        User owner = userService.findById(rentalDto.getOwnerId());
+        rental.setOwner(owner);
+
         Rental updatedRental =rentalRepository.save(rental);
         return mapToDto(updatedRental);
     }
@@ -76,9 +86,10 @@ public class RentalServiceImpl implements RentalService {
         rentalDto.setPrice(rental.getPrice());
         rentalDto.setDescription(rental.getDescription());
         rentalDto.setPicture(rental.getPicture());
-        rentalDto.setOwner_id(rental.getOwner_id());
+        rentalDto.setOwnerId(rental.getOwnerId());
         return rentalDto;
     }
+
     private Rental mapToEntity(RentalDto rentalDto) {
         Rental rental = new Rental();
         rental.setId(rentalDto.getId());
@@ -87,8 +98,8 @@ public class RentalServiceImpl implements RentalService {
         rental.setPrice(rentalDto.getPrice());
         rental.setDescription(rentalDto.getDescription());
         rental.setPicture(rentalDto.getPicture());
-        rental.setOwner_id(rentalDto.getOwner_id());
+        User owner = userService.findById(rentalDto.getOwnerId());
+        rental.setOwner(owner);
         return rental;
-
     }
 }

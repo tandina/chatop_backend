@@ -1,28 +1,42 @@
 package com.chatopreview.api.api.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import com.chatopreview.api.api.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-@Data
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
+@Table(name = "message")
 public class Message {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int rentals_id;
-    private int user_id;
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "rental_id", nullable = false)
+    private Rental rental;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
+
+    @Column(name = "message", nullable = false)
     private String message;
-    private Timestamp created_at;
-    private Timestamp updated_at;
+
+       @Column(name = "created_at")
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
 }
-

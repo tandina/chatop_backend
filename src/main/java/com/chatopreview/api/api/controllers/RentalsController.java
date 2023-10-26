@@ -43,9 +43,5 @@ public class RentalsController {
         RentalDto response = rentalService.updateRental(rentalDto, rentalId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @DeleteMapping("rental/{id}/delete")
-    public ResponseEntity<String> deleteRental(@PathVariable("id") int rentalId) {
-        System.out.println(rentalId);
-        return ResponseEntity.ok("annonce supprimer avec succès");
-    }
+
 }

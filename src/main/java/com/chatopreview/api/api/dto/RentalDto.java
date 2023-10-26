@@ -10,5 +10,5 @@ public class RentalDto {
     private Number price;
     private String picture;
     private String description;
-    private int owner_id;
+    private int ownerId;
 }

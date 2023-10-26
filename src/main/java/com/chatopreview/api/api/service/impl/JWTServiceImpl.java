@@ -18,21 +18,11 @@ import java.util.function.Function;
 
 @Service
 public class JWTServiceImpl implements JWTService {
-    private final String secretKey;
-
-    public JWTServiceImpl() {
-        SecureRandom random = new SecureRandom();
-        byte[] keyBytes = new byte[32];
-        random.nextBytes(keyBytes);
-
-        secretKey = Base64.getEncoder().encodeToString(keyBytes);
-        System.out.println("Generated SECRET_KEY : " + "piCdjyVY1fiZavME8QHZymVx2nU6xGsEsK89L+/DRpU=");
-    }
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 100 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 2 * 60 * 60 * 1000))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -52,7 +42,7 @@ public class JWTServiceImpl implements JWTService {
     }
 
     private Key getSignKey() {
-        byte[] key = Decoders.BASE64.decode(secretKey);
+        byte[] key = Decoders.BASE64.decode("piCdjyVY1fiZavME8QHZymVx2nU6xGsEsK89L+/DRpU=");
         return Keys.hmacShaKeyFor(key);
     }
     private Claims extractAllClaims(String token){
