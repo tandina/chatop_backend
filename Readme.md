@@ -111,3 +111,6 @@ vous allez pouvoir mettre à jour l'annonce déjà publier, renseigner le token 
 "description": "Lorem ipsum ipsum ipsum ipsum dolor sit amet",
 "owner_id": 1
 }
+
+### Url swagger :
+http://localhost:8080/swagger-ui/index.html#/
